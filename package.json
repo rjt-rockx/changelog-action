@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "description": "Parse markdown files, generate releases, tweet notes and send to Discord",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "format": "prettier --write '**/*.ts'",
-    "format-check": "prettier --check '**/*.ts'",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map",
     "all": "pnpm run build && pnpm run format && pnpm run lint && pnpm run package"

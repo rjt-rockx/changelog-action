@@ -1,6 +1,5 @@
-import fs from "node:fs";
-
 import { debug, getInput, setFailed, setOutput } from "@actions/core";
+import fs from "fs";
 
 async function run(): Promise<void> {
 	try {
