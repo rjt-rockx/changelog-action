@@ -24,7 +24,7 @@ jobs:
           version: 6.0.2
 
       - run: |
-          pnpm install
+          pnpm install --frozen-lockfile
 
       - run: |
           pnpm run all
