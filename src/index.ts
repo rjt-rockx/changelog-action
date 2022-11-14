@@ -1,10 +1,24 @@
 import { getInput, setFailed } from "@actions/core";
+import fs from "fs/promises";
 
 async function run(): Promise<void> {
 	try {
 		console.log("Hello World!");
-		const file: string = getInput("file");
-		console.log({ file });
+		const files: string[] = JSON.parse(getInput("files"));
+		console.log({ files });
+
+		const markdownFiles = files.filter((file) => file.endsWith(".md"));
+		console.log({ markdownFiles });
+
+		if (!markdownFiles.length) return;
+
+		const latest = markdownFiles.sort((a, b) => a.localeCompare(b)).pop();
+		console.log({ latest });
+
+		if (!latest) return;
+
+		const content = await fs.readFile(latest, "utf8");
+		console.log({ content });
 		// const content: string = fs.readFileSync(file, "utf8");
 		// debug(new Date().toTimeString());
 

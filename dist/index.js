@@ -15,14 +15,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __nccwpck_require__(535);
+const promises_1 = __importDefault(__nccwpck_require__(225));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             console.log("Hello World!");
-            const file = (0, core_1.getInput)("file");
-            console.log({ file });
+            const files = JSON.parse((0, core_1.getInput)("files"));
+            console.log({ files });
+            const markdownFiles = files.filter((file) => file.endsWith(".md"));
+            console.log({ markdownFiles });
+            if (!markdownFiles.length)
+                return;
+            const latest = markdownFiles.sort((a, b) => a.localeCompare(b)).pop();
+            console.log({ latest });
+            if (!latest)
+                return;
+            const content = yield promises_1.default.readFile(latest, "utf8");
+            console.log({ content });
             // const content: string = fs.readFileSync(file, "utf8");
             // debug(new Date().toTimeString());
             // /*
@@ -2766,6 +2780,14 @@ module.exports = require("events");
 
 "use strict";
 module.exports = require("fs");
+
+/***/ }),
+
+/***/ 225:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("fs/promises");
 
 /***/ }),
 

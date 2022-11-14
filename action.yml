@@ -2,9 +2,9 @@ name: 'Changelog action'
 description: 'Parse markdown files, generate releases, tweet notes and send to Discord'
 author: 'Hyperbeam Inc'
 inputs:
-  file:
+  files:
     required: true
-    description: 'The changelog markdown file to parse'
+    description: 'The changed files to check and parse'
 runs:
   using: 'node16'
   main: 'dist/index.js'
