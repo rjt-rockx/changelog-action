@@ -25,6 +25,8 @@ async function run(): Promise<void> {
 		const latest = markdownFiles.sort((a, b) => a.localeCompare(b)).pop();
 		if (!latest) return;
 
+		setOutput("latest", latest.substring(0, latest.lastIndexOf(".")));
+
 		const content = await fs.readFile(latest, "utf8");
 		setOutput("content", content);
 	} catch (error) {

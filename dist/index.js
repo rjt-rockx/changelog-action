@@ -45,6 +45,7 @@ function run() {
             const latest = markdownFiles.sort((a, b) => a.localeCompare(b)).pop();
             if (!latest)
                 return;
+            (0, core_1.setOutput)("latest", latest.substring(0, latest.lastIndexOf(".")));
             const content = yield promises_1.default.readFile(latest, "utf8");
             (0, core_1.setOutput)("content", content);
         }
