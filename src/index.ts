@@ -1,9 +1,8 @@
-import { debug, getInput, setFailed, setOutput } from "@actions/core";
-import fs from "fs";
+import { getInput, setFailed } from "@actions/core";
 
 async function run(): Promise<void> {
 	try {
-		debug(new Date().toTimeString());
+		console.log("Hello World!");
 		const file: string = getInput("file");
 		console.log({ file });
 		// const content: string = fs.readFileSync(file, "utf8");

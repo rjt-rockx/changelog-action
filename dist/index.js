@@ -15,20 +15,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __nccwpck_require__(535);
-const fs_1 = __importDefault(__nccwpck_require__(747));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            (0, core_1.debug)(new Date().toTimeString());
+            console.log("Hello World!");
             const file = (0, core_1.getInput)("file");
-            const content = fs_1.default.readFileSync(file, "utf8");
-            (0, core_1.debug)(new Date().toTimeString());
-            (0, core_1.setOutput)("content", content);
+            console.log({ file });
+            // const content: string = fs.readFileSync(file, "utf8");
+            // debug(new Date().toTimeString());
+            // /*
+            //  * Steps:
+            //  * 1. Parse the content of the markdown file
+            //  * We need the version, a summary and a full description
+            //  * 2. Send the content to Discord and Twitter
+            //  * For Discord,
+            //  * title: version
+            //  * description: changelog trimmed to 2048 characters
+            //  * For Twitter,
+            //  * Changelog v(version) - (summary) --> trimmed to 280 characters
+            //  * 3. Set the output and exit
+            //  * */
+            // setOutput("content", content);
         }
         catch (error) {
             if (error instanceof Error)
