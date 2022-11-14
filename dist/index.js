@@ -24,34 +24,29 @@ const promises_1 = __importDefault(__nccwpck_require__(225));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            console.log("Hello World!");
-            const files = JSON.parse((0, core_1.getInput)("files"));
-            console.log({ files });
-            const markdownFiles = files.filter((file) => file.endsWith(".md"));
-            console.log({ markdownFiles });
+            let files;
+            try {
+                const data = JSON.parse((0, core_1.getInput)("files"));
+                if (!Array.isArray(data))
+                    (0, core_1.setFailed)("Files is not an array");
+                files = data;
+            }
+            catch (error) {
+                return (0, core_1.setFailed)("Invalid JSON");
+            }
+            let markdownFiles = files.filter((file) => file.endsWith(".md"));
             if (!markdownFiles.length)
                 return;
+            const filter = (0, core_1.getInput)("filter");
+            if (filter) {
+                const regex = new RegExp(filter, (0, core_1.getInput)("filterflags"));
+                markdownFiles = markdownFiles.filter((file) => regex.test(file));
+            }
             const latest = markdownFiles.sort((a, b) => a.localeCompare(b)).pop();
-            console.log({ latest });
             if (!latest)
                 return;
             const content = yield promises_1.default.readFile(latest, "utf8");
-            console.log({ content });
-            // const content: string = fs.readFileSync(file, "utf8");
-            // debug(new Date().toTimeString());
-            // /*
-            //  * Steps:
-            //  * 1. Parse the content of the markdown file
-            //  * We need the version, a summary and a full description
-            //  * 2. Send the content to Discord and Twitter
-            //  * For Discord,
-            //  * title: version
-            //  * description: changelog trimmed to 2048 characters
-            //  * For Twitter,
-            //  * Changelog v(version) - (summary) --> trimmed to 280 characters
-            //  * 3. Set the output and exit
-            //  * */
-            // setOutput("content", content);
+            (0, core_1.setOutput)("content", content);
         }
         catch (error) {
             if (error instanceof Error)

@@ -5,6 +5,13 @@ inputs:
   files:
     required: true
     description: 'The changed files to check and parse'
+  filter:
+    required: false
+    description: 'The regex to filter changed files against'
+  filterflags:
+    required: false
+    description: 'The flags for the filter regex'
+    default: "gmi"
 runs:
   using: 'node16'
   main: 'dist/index.js'
