@@ -77,7 +77,10 @@ async function run(): Promise<void> {
 			.filter((header) => header !== undefined) as Section[];
 
 		const parsedJSON = parseSections(parsed);
+		console.log(`Sections: ${JSON.stringify(parsedJSON, null, 2)}`);
+
 		setOutput("sections", JSON.stringify(parsedJSON));
+		console.log("Done");
 	} catch (error) {
 		if (error instanceof Error) setFailed(error.message);
 	}

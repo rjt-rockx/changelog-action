@@ -76,7 +76,9 @@ function run() {
             })
                 .filter((header) => header !== undefined);
             const parsedJSON = parseSections(parsed);
+            console.log(`Sections: ${JSON.stringify(parsedJSON, null, 2)}`);
             (0, core_1.setOutput)("sections", JSON.stringify(parsedJSON));
+            console.log("Done");
         }
         catch (error) {
             if (error instanceof Error)
