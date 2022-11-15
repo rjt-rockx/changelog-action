@@ -49,6 +49,7 @@ function main(input = core_1.getInput, output = core_1.setOutput, fail = core_1.
             const filename = path_1.default.parse(path_1.default.resolve(latest)).name;
             output("latest", filename);
             const content = yield promises_1.default.readFile(latest, "utf8");
+            console.log(`Read ${latest}: ${content.length} characters`);
             output("content", content);
             const headerRegex = /^(?<level>#{1,6})\s+(?<name>.+)$/gm;
             const headers = [...content.matchAll(headerRegex)]
@@ -74,6 +75,8 @@ function main(input = core_1.getInput, output = core_1.setOutput, fail = core_1.
             })
                 .filter((header) => header !== undefined);
             const parsedJSON = parseSections(parsed);
+            console.log("Sections");
+            console.log(JSON.stringify(parsedJSON, null, 2));
             output("sections", JSON.stringify(parsedJSON));
             console.log("Done");
         }

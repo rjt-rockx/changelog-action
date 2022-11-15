@@ -45,6 +45,7 @@ async function main(input = getInput, output = setOutput, fail = setFailed): Pro
 		output("latest", filename);
 
 		const content = await fs.readFile(latest, "utf8");
+		console.log(`Read ${latest}: ${content.length} characters`);
 		output("content", content);
 
 		const headerRegex = /^(?<level>#{1,6})\s+(?<name>.+)$/gm;
@@ -73,6 +74,8 @@ async function main(input = getInput, output = setOutput, fail = setFailed): Pro
 			.filter((header) => header !== undefined) as Section[];
 
 		const parsedJSON = parseSections(parsed);
+		console.log("Sections");
+		console.log(JSON.stringify(parsedJSON, null, 2));
 		output("sections", JSON.stringify(parsedJSON));
 
 		console.log("Done");
