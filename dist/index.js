@@ -51,12 +51,62 @@ function run() {
             (0, core_1.setOutput)("latest", filename);
             const content = yield promises_1.default.readFile(latest, "utf8");
             (0, core_1.setOutput)("content", content);
+            const headerRegex = /^(?<level>#{1,6})\s+(?<name>.+)$/gm;
+            const headers = [...content.matchAll(headerRegex)]
+                .map((match) => {
+                if (match && match.groups && match.index)
+                    return {
+                        start: match.index,
+                        end: match.index + match[0].length,
+                        level: match.groups.level.length,
+                        name: match.groups.name,
+                    };
+                return null;
+            })
+                .filter((header) => header !== null);
+            const parsed = headers
+                .map((header, index) => {
+                const nextHeader = headers[index + 1];
+                if (header)
+                    return {
+                        level: header.level,
+                        header: header.name,
+                        content: content.slice(header.end, nextHeader === null || nextHeader === void 0 ? void 0 : nextHeader.start).trim() || undefined,
+                    };
+            })
+                .filter((header) => header !== undefined);
+            const parsedJSON = parseSections(parsed);
+            (0, core_1.setOutput)("sections", JSON.stringify(parsedJSON));
         }
         catch (error) {
             if (error instanceof Error)
                 (0, core_1.setFailed)(error.message);
         }
     });
+}
+function parseSections(sections) {
+    const headers = new Map();
+    for (const section of sections) {
+        headers.set(section.level, section);
+        if (section.level === 1) {
+            continue;
+        }
+        const parent = headers.get(section.level - 1);
+        if (parent) {
+            if (!parent.children)
+                parent.children = [];
+            parent.children.push(section);
+        }
+    }
+    return toJSON(headers.get(1));
+}
+function toJSON(section) {
+    const data = {};
+    data[section.header] = { content: section.content };
+    if (section.children) {
+        data[section.header].children = section.children.map(toJSON);
+    }
+    return data;
 }
 run();
 
