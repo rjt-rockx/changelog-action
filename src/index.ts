@@ -27,7 +27,7 @@ async function run(): Promise<void> {
 		const latest = markdownFiles.sort((a, b) => a.localeCompare(b)).pop();
 		if (!latest) return;
 
-		const filename = path.parse(path.resolve(latest)).base;
+		const filename = path.parse(path.resolve(latest)).name;
 
 		console.log(`Latest: ${filename}`);
 
