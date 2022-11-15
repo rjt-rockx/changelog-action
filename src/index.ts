@@ -1,5 +1,6 @@
 import { getInput, setFailed, setOutput } from "@actions/core";
 import fs from "fs/promises";
+import path from "path";
 
 async function run(): Promise<void> {
 	try {
@@ -26,9 +27,11 @@ async function run(): Promise<void> {
 		const latest = markdownFiles.sort((a, b) => a.localeCompare(b)).pop();
 		if (!latest) return;
 
-		console.log(`Latest file: ${latest}`);
+		const filename = path.parse(path.resolve(latest)).base;
 
-		setOutput("latest", latest.substring(0, latest.lastIndexOf(".")));
+		console.log(`Latest: ${filename}`);
+
+		setOutput("latest", filename);
 
 		const content = await fs.readFile(latest, "utf8");
 		setOutput("content", content);

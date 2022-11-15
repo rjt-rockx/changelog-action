@@ -21,6 +21,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __nccwpck_require__(535);
 const promises_1 = __importDefault(__nccwpck_require__(225));
+const path_1 = __importDefault(__nccwpck_require__(622));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -45,8 +46,9 @@ function run() {
             const latest = markdownFiles.sort((a, b) => a.localeCompare(b)).pop();
             if (!latest)
                 return;
-            console.log(`Latest file: ${latest}`);
-            (0, core_1.setOutput)("latest", latest.substring(0, latest.lastIndexOf(".")));
+            const filename = path_1.default.parse(path_1.default.resolve(latest)).base;
+            console.log(`Latest: ${filename}`);
+            (0, core_1.setOutput)("latest", filename);
             const content = yield promises_1.default.readFile(latest, "utf8");
             (0, core_1.setOutput)("content", content);
         }
