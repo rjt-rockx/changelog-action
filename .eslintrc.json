@@ -29,6 +29,7 @@
 		"no-return-await": "warn",
 		"no-unneeded-ternary": "warn",
 		"object-shorthand": ["warn", "always"],
+		"sort-imports": "off",
 		"simple-import-sort/imports": "warn",
 		"simple-import-sort/exports": "warn",
 		"i18n-text/no-en": "off"

@@ -22,46 +22,44 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __nccwpck_require__(535);
 const promises_1 = __importDefault(__nccwpck_require__(225));
 const path_1 = __importDefault(__nccwpck_require__(622));
-function run() {
+function main(input = core_1.getInput, output = core_1.setOutput, fail = core_1.setFailed) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let files;
             try {
-                const data = JSON.parse((0, core_1.getInput)("files"));
+                const data = JSON.parse(input("files"));
                 if (!Array.isArray(data))
-                    (0, core_1.setFailed)("Files is not an array");
+                    fail("Files is not an array");
                 files = data;
             }
             catch (error) {
-                return (0, core_1.setFailed)("Invalid JSON");
+                return fail("Invalid JSON");
             }
             let markdownFiles = files.filter((file) => file.endsWith(".md"));
             if (!markdownFiles.length)
                 return;
-            const filter = (0, core_1.getInput)("filter");
+            const filter = input("filter");
             if (filter) {
-                markdownFiles = markdownFiles.filter((file) => new RegExp(filter, (0, core_1.getInput)("filterflags")).test(file));
+                markdownFiles = markdownFiles.filter((file) => new RegExp(filter, input("filterflags")).test(file));
             }
             console.log(`Found ${markdownFiles.length} files`);
             const latest = markdownFiles.sort((a, b) => a.localeCompare(b)).pop();
             if (!latest)
                 return;
             const filename = path_1.default.parse(path_1.default.resolve(latest)).name;
-            console.log(`Latest: ${filename}`);
-            (0, core_1.setOutput)("latest", filename);
+            output("latest", filename);
             const content = yield promises_1.default.readFile(latest, "utf8");
-            (0, core_1.setOutput)("content", content);
+            output("content", content);
             const headerRegex = /^(?<level>#{1,6})\s+(?<name>.+)$/gm;
             const headers = [...content.matchAll(headerRegex)]
                 .map((match) => {
-                if (match && match.groups && match.index)
+                if (match && match.groups && match.index !== undefined)
                     return {
                         start: match.index,
                         end: match.index + match[0].length,
                         level: match.groups.level.length,
                         name: match.groups.name,
                     };
-                return null;
             })
                 .filter((header) => header !== null);
             const parsed = headers
@@ -76,13 +74,12 @@ function run() {
             })
                 .filter((header) => header !== undefined);
             const parsedJSON = parseSections(parsed);
-            console.log(`Sections: ${JSON.stringify(parsedJSON, null, 2)}`);
-            (0, core_1.setOutput)("sections", JSON.stringify(parsedJSON));
+            output("sections", JSON.stringify(parsedJSON));
             console.log("Done");
         }
         catch (error) {
             if (error instanceof Error)
-                (0, core_1.setFailed)(error.message);
+                fail(error);
         }
     });
 }
@@ -109,6 +106,12 @@ function toJSON(section) {
         data[section.header].children = section.children.map(toJSON);
     }
     return data;
+}
+exports.default = main;
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return main(core_1.getInput, core_1.setOutput, core_1.setFailed);
+    });
 }
 run();
 
