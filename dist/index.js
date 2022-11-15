@@ -39,12 +39,13 @@ function run() {
                 return;
             const filter = (0, core_1.getInput)("filter");
             if (filter) {
-                const regex = new RegExp(filter, (0, core_1.getInput)("filterflags"));
-                markdownFiles = markdownFiles.filter((file) => regex.test(file));
+                markdownFiles = markdownFiles.filter((file) => new RegExp(filter, (0, core_1.getInput)("filterflags")).test(file));
             }
+            console.log(`Found ${markdownFiles.length} files`);
             const latest = markdownFiles.sort((a, b) => a.localeCompare(b)).pop();
             if (!latest)
                 return;
+            console.log(`Latest file: ${latest}`);
             (0, core_1.setOutput)("latest", latest.substring(0, latest.lastIndexOf(".")));
             const content = yield promises_1.default.readFile(latest, "utf8");
             (0, core_1.setOutput)("content", content);

@@ -18,12 +18,15 @@ async function run(): Promise<void> {
 
 		const filter: string = getInput("filter");
 		if (filter) {
-			const regex = new RegExp(filter, getInput("filterflags"));
-			markdownFiles = markdownFiles.filter((file) => regex.test(file));
+			markdownFiles = markdownFiles.filter((file) => new RegExp(filter, getInput("filterflags")).test(file));
 		}
+
+		console.log(`Found ${markdownFiles.length} files`);
 
 		const latest = markdownFiles.sort((a, b) => a.localeCompare(b)).pop();
 		if (!latest) return;
+
+		console.log(`Latest file: ${latest}`);
 
 		setOutput("latest", latest.substring(0, latest.lastIndexOf(".")));
 
