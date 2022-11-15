@@ -106,7 +106,7 @@ function toJSON(section) {
     const data = {};
     data[section.header] = { content: section.content };
     if (section.children) {
-        data[section.header].children = section.children.map(toJSON);
+        data[section.header].children = section.children.map(toJSON).reduce((a, b) => (Object.assign(Object.assign({}, a), b)), {});
     }
     return data;
 }

@@ -12,7 +12,7 @@ type Section = {
 type SectionJSON = {
 	[key: string]: {
 		content?: string;
-		children?: SectionJSON[];
+		children?: SectionJSON;
 	};
 };
 
@@ -104,7 +104,7 @@ function toJSON(section: Section): SectionJSON {
 	const data = {} as SectionJSON;
 	data[section.header] = { content: section.content };
 	if (section.children) {
-		data[section.header].children = section.children.map(toJSON);
+		data[section.header].children = section.children.map(toJSON).reduce((a, b) => ({ ...a, ...b }), {});
 	}
 	return data;
 }
